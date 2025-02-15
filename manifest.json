@@ -1,0 +1,18 @@
+{
+    "name": "Hello Extensions",
+    "description": "Base Level Extension",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_icon": {
+          "16": "lemon.png",
+          "32": "lemon.png",
+          "48": "lemon.png",
+          "128": "lemon.png"
+        }
+      },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": ["activeTab", "scripting"]
+  }
