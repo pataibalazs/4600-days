@@ -7,7 +7,7 @@ chrome.runtime.onInstalled.addListener(() => {
 async function enableExtension(tabId) {
   try {
     await chrome.scripting.insertCSS({
-      files: ["video-rotate.css", "video-blur.css"],
+      files: ["video-rotate.css", "video-blur.css", "video-overlay.css"],
       target: { tabId: tabId },
     });
   } catch (error) {
@@ -18,7 +18,7 @@ async function enableExtension(tabId) {
 async function disableExtension(tabId) {
   try {
     await chrome.scripting.removeCSS({
-      files: ["video-rotate.css", "video-blur.css"],
+      files: ["video-rotate.css", "video-blur.css", "video-overlay.css"],
       target: { tabId: tabId },
     });
   } catch (error) {
