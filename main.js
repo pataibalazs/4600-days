@@ -6,9 +6,16 @@ chrome.runtime.onInstalled.addListener(() => {
 
 async function enableExtension(tabId) {
   try {
+    // Inject CSS
     await chrome.scripting.insertCSS({
       files: ["video-rotate.css", "video-blur.css", "video-overlay.css"],
       target: { tabId: tabId },
+    });
+
+    // Inject video volume changing script
+    await chrome.scripting.executeScript({
+      target: { tabId: tabId },
+      files: ["videoVolumeChanger.js"],
     });
   } catch (error) {
     console.error("Error enabling extension:", error);
@@ -17,9 +24,21 @@ async function enableExtension(tabId) {
 
 async function disableExtension(tabId) {
   try {
+    // Remove CSS
     await chrome.scripting.removeCSS({
       files: ["video-rotate.css", "video-blur.css", "video-overlay.css"],
       target: { tabId: tabId },
+    });
+
+    // Stop changing video volume
+    await chrome.scripting.executeScript({
+      target: { tabId: tabId },
+      func: () => {
+        if (window.videoVolumeInterval) {
+          clearInterval(window.videoVolumeInterval);
+          delete window.videoVolumeInterval;
+        }
+      },
     });
   } catch (error) {
     console.error("Error disabling extension:", error);
