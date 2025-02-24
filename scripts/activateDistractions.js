@@ -9,7 +9,7 @@ async function enableVisualDistraction(tabId, files) {
   }
 }
 
-async function disableVisualDistraction(tabId, files) {
+async function disableVisualDistraction(tabId) {
   try {
     await chrome.scripting.removeCSS({
       files: [
