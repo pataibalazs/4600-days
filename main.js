@@ -2,6 +2,7 @@ importScripts("scripts/domainList.js");
 importScripts("scripts/activateDistractions.js");
 importScripts("distractions/distractionLevels.js");
 
+
 function getStoredState() {
   return new Promise((resolve) => {
     chrome.storage.local.get(["distractionState", "sliderValue"], (result) => {
@@ -10,6 +11,14 @@ function getStoredState() {
         sliderValue: result.sliderValue || 1,
       });
     });
+  });
+}
+
+function addSettinOnAllTabs(jsFiles) {
+  chrome.tabs.query({ url: ["*://*.instagram.com/*"] }, async (tabs) => {
+    for (const tab of tabs) {
+      await enableSettingsDistraction(tab.id, jsFiles);
+    }
   });
 }
 

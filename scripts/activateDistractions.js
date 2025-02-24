@@ -24,11 +24,11 @@ async function disableVisualDistraction(tabId) {
   }
 }
 
-async function enableSettingsDistraction(tabId) {
+async function enableSettingsDistraction(tabId, files) {
   try {
     await chrome.scripting.executeScript({
       target: { tabId: tabId },
-      files: ["videoVolumeChanger.js", "videoRotation.js"],
+      files: files,
     });
   } catch (error) {
     console.error("Error enabling settings distraction:", error);
@@ -48,5 +48,32 @@ async function disableSettingsDistraction(tabId) {
     });
   } catch (error) {
     console.error("Error disabling settings distraction:", error);
+  }
+}
+
+async function disableSettingsDistraction2(tabId, distractionsToRemove = []) {
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId: tabId },
+      args: [distractionsToRemove],
+      func: (distractionsToRemove) => {
+        const distractions = {
+          videoVolume: "videoVolumeInterval",
+          videoRotation: "videoRotationInterval",
+        };
+
+        distractionsToRemove.forEach((distractionType) => {
+          const intervalName = distractions[distractionType];
+
+          if (window[intervalName]) {
+            clearInterval(window[intervalName]);
+            delete window[intervalName];
+            console.log(`Disabled ${distractionType} distraction.`);
+          }
+        });
+      },
+    });
+  } catch (error) {
+    console.error("Error disabling settings distractions:", error);
   }
 }

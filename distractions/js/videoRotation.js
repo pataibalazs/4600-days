@@ -28,15 +28,4 @@
   }
 
   window.videoRotationInterval = setInterval(rotateVideos, 500); // Run check every 0.5 sec
-
-  // Function to stop rotation
-  window.stopVideoRotation = function () {
-    window.videoRotationEnabled = false;
-    clearInterval(window.videoRotationInterval);
-    document.querySelectorAll("video").forEach((video) => {
-      video.style.transform = "rotate(0deg)"; // Reset rotation
-      delete video.dataset.rotationApplied;
-    });
-    console.log("Video rotation stopped");
-  };
 })();
