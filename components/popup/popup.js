@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const toggleButton = document.querySelector("[role='switch']");
-  const slider = document.getElementById("annoyanceSlider");
-  const sliderValue = document.getElementById("sliderValue");
-  const emoji = document.getElementById("emoji");
+  const settingsBtn = document.getElementById("settingsBtn");
 
   chrome.runtime.sendMessage({ action: "getToggleState" }, function (response) {
     if (chrome.runtime.lastError) {
@@ -11,7 +9,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     if (response) {
       updateToggleUI(response.state === "ON");
-      updateSliderUI(response.sliderValue || 1);
     }
   });
 
@@ -36,13 +33,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  function updateSliderUI(value) {
-    slider.value = value;
-    sliderValue.textContent = value;
-    const emojiList = ["😐", "😒", "😠", "🤬", "💀"];
-    emoji.textContent = emojiList[value - 1];
-  }
-
   toggleButton.addEventListener("click", function () {
     const isActive = toggleButton.getAttribute("aria-checked") === "true";
     const nextState = isActive ? "OFF" : "ON";
@@ -61,11 +51,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   });
 
-  slider.addEventListener("input", function () {
-    const value = parseInt(slider.value);
-    updateSliderUI(value);
-
-    chrome.runtime.sendMessage({ action: "setSliderValue", value });
+  // Settings button handler
+  settingsBtn.addEventListener("click", function () {
+    // Open the settings page in a new tab
+    chrome.tabs.create({ url: "components/settings/settings.html" });
   });
 
   chrome.runtime.onMessage.addListener((request) => {
