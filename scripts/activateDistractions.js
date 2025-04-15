@@ -1,7 +1,16 @@
-async function enableVisualDistraction(tabId, files) {
+async function enableVisualDistraction(tabId, effects) {
+  console.log(
+    "Enabling visual distraction for tab:",
+    tabId,
+    "with effects:",
+    effects
+  );
+
+  const cssFiles = effects.map((effect) => `distractions/css/${effect}.css`);
+
   try {
     await chrome.scripting.insertCSS({
-      files: files,
+      files: cssFiles,
       target: { tabId: tabId },
     });
   } catch (error) {

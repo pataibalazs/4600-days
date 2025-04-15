@@ -2,15 +2,17 @@ importScripts("scripts/domainList.js");
 importScripts("scripts/activateDistractions.js");
 importScripts("distractions/distractionLevels.js");
 
-
 function getStoredState() {
   return new Promise((resolve) => {
-    chrome.storage.local.get(["distractionState", "sliderValue"], (result) => {
-      resolve({
-        state: result.distractionState || "OFF",
-        sliderValue: result.sliderValue || 1,
-      });
-    });
+    chrome.storage.local.get(
+      ["distractionState", "domainsWithEffects"],
+      (result) => {
+        resolve({
+          state: result.distractionState || "OFF",
+          domains: result.domainsWithEffects || [],
+        });
+      }
+    );
   });
 }
 
@@ -22,12 +24,20 @@ function addSettinOnAllTabs(jsFiles) {
   });
 }
 
-function addVisualsOnAllTabs(cssFiles) {
-  chrome.tabs.query({ url: ["*://*.instagram.com/*"] }, async (tabs) => {
-    for (const tab of tabs) {
-      await enableVisualDistraction(tab.id, cssFiles);
+function addCSSOnAllTabs(domainsWithEffects) {
+  for (const { name, effects } of domainsWithEffects) {
+    if (effects.length === 0) {
+      console.log("No effects for domain:", name);
+      continue;
     }
-  });
+    const urlPattern = `*://*.${name}/*`;
+
+    chrome.tabs.query({ url: [urlPattern] }, async (tabs) => {
+      for (const tab of tabs) {
+        await enableVisualDistraction(tab.id, effects);
+      }
+    });
+  }
 }
 
 function removeVisualsOnAllTabs() {
@@ -44,6 +54,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 
+  if (request.action === "updateDomainList") {
+    console.log("Received domain list update:", request.domains);
+    chrome.storage.local.set({ domainsWithEffects: request.domains }, () => {});
+    console.log("Domains saved to storage");
+
+    addCSSOnAllTabs(request.domains);
+  }
+
   if (request.action === "setToggleState") {
     chrome.storage.local.set({ distractionState: request.state }, () => {
       sendResponse({ success: true });
@@ -53,7 +71,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         );
         const files = selectedLevel ? selectedLevel.files : [];
         if (request.state === "ON") {
-          addVisualsOnAllTabs(files);
+          addCSSOnAllTabs(files);
         } else {
           removeVisualsOnAllTabs();
         }
@@ -61,41 +79,31 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
     return true;
   }
-
-  if (request.action === "setSliderValue") {
-    chrome.storage.local.set({ sliderValue: request.value }, () => {
-      sendResponse({ success: true });
-      chrome.storage.local.get("distractionState", (result) => {
-        if (result.distractionState === "ON") {
-          const selectedLevel = Object.values(DistractionLevel).find(
-            (level) => level.value === request.value
-          );
-          const files = selectedLevel ? selectedLevel.files : [];
-          chrome.tabs.query({ url: ["*://*.instagram.com/*"] }, async (tabs) => {
-            for (const tab of tabs) {
-              await disableVisualDistraction(tab.id);
-              await enableVisualDistraction(tab.id, files);
-            }
-          });
-        }
-      });
-    });
-    return true;
-  }
 });
 
-// Reapply distractions on Instagram when a page reloads.
+// Apply domain effects when a page loads
 chrome.webNavigation.onCompleted.addListener(
   (details) => {
-    getStoredState().then(({ state, sliderValue }) => {
-      if (state === "ON") {
-        const selectedLevel = Object.values(DistractionLevel).find(
-          (level) => level.value === sliderValue
-        );
-        const files = selectedLevel ? selectedLevel.files : [];
-        enableVisualDistraction(details.tabId, files);
+    console.log("Page navigation completed", details.url);
+
+    getStoredState().then(({ state, domains }) => {
+      if (state === "ON" && domains.length > 0) {
+        chrome.tabs.get(details.tabId, (tab) => {
+          const url = new URL(tab.url);
+          const hostname = url.hostname;
+          console.log("Checking hostname:", hostname);
+
+          const matchingDomain = domains.find((domain) =>
+            hostname.includes(domain.name)
+          );
+
+          if (matchingDomain?.effects?.length > 0) {
+            console.log("Applying effects for domain:", matchingDomain);
+            enableVisualDistraction(details.tabId, matchingDomain.effects);
+          }
+        });
       }
     });
   },
-  { url: [{ hostSuffix: "instagram.com" }] }
+  { url: [{ schemes: ["http", "https"] }] }
 );

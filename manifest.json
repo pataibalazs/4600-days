@@ -4,7 +4,7 @@
   "version": "1.0",
   "manifest_version": 3,
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "components/popup/popup.html",
     "default_icon": {
       "16": "images/logo.png",
       "32": "images/logo.png",
@@ -16,5 +16,11 @@
     "service_worker": "main.js"
   },
   "permissions": ["activeTab", "scripting", "storage", "tabs", "webNavigation"],
-  "host_permissions": ["https://www.instagram.com/*"]
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "web_accessible_resources": [
+    {
+      "resources": ["distractions/css/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
