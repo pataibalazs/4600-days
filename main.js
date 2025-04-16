@@ -2,8 +2,6 @@ importScripts("scripts/domainList.js");
 importScripts("scripts/activateDistractions.js");
 importScripts("distractions/distractionLevels.js");
 
-allEffects = ["rotate"];
-
 function getStoredState() {
   return new Promise((resolve) => {
     chrome.storage.local.get(
@@ -15,6 +13,40 @@ function getStoredState() {
         });
       }
     );
+  });
+}
+
+function addCSSOnAllTabs(domainsWithEffects) {
+  for (const { name, effects } of domainsWithEffects) {
+    if (effects.length === 0) {
+      console.log("No effects for domain:", name);
+      continue;
+    }
+    const urlPattern = `*://*.${name}/*`;
+
+    chrome.tabs.query({ url: [urlPattern] }, async (tabs) => {
+      for (const tab of tabs) {
+        await enableVisualDistraction(tab.id, effects);
+      }
+    });
+  }
+}
+
+function removeCSSOnAllTabs() {
+  getStoredState().then(({ domains }) => {
+    const patterns = domains
+      .filter((d) => d.effects?.length > 0)
+      .map((d) => `*://*.${d.name}/*`);
+
+    if (patterns.length === 0) return;
+
+    // Query all matching tabs at once
+    chrome.tabs.query({ url: patterns }, async (tabs) => {
+      for (const tab of tabs) {
+        const domain = domains.find((d) => tab.url.includes(d.name));
+        await disableVisualDistraction(tab.id, domain.effects);
+      }
+    });
   });
 }
 

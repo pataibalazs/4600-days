@@ -1,0 +1,14 @@
+body {
+    -webkit-filter: grayscale(100%); /* Safari, Chrome, Opera */
+    filter: grayscale(100%);
+  }
+  
+img {
+    -webkit-filter: grayscale(100%); /* Safari, Chrome, Opera */
+    filter: grayscale(100%);
+}
+  
+video {
+    -webkit-filter: grayscale(100%); /* Safari, Chrome, Opera */
+    filter: grayscale(100%);
+}
