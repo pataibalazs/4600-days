@@ -2,6 +2,8 @@ importScripts("scripts/domainList.js");
 importScripts("scripts/activateDistractions.js");
 importScripts("distractions/distractionLevels.js");
 
+allEffects = ["rotate"];
+
 function getStoredState() {
   return new Promise((resolve) => {
     chrome.storage.local.get(
@@ -16,6 +18,7 @@ function getStoredState() {
   });
 }
 
+/*
 function addSettinOnAllTabs(jsFiles) {
   chrome.tabs.query({ url: ["*://*.instagram.com/*"] }, async (tabs) => {
     for (const tab of tabs) {
@@ -23,6 +26,7 @@ function addSettinOnAllTabs(jsFiles) {
     }
   });
 }
+
 
 function addCSSOnAllTabs(domainsWithEffects) {
   for (const { name, effects } of domainsWithEffects) {
@@ -40,13 +44,43 @@ function addCSSOnAllTabs(domainsWithEffects) {
   }
 }
 
-function removeVisualsOnAllTabs() {
-  chrome.tabs.query({ url: ["*://*.instagram.com/*"] }, async (tabs) => {
-    for (const tab of tabs) {
-      await disableVisualDistraction(tab.id);
+function removeCSSOnAllTabs() {
+  getStoredState().then(({ domains }) => {
+    const patterns = domains
+      .filter((d) => d.effects?.length > 0)
+      .map((d) => `*://*.${d.name}/*`);
+
+    if (patterns.length === 0) return;
+
+    // Query all matching tabs at once
+    chrome.tabs.query({ url: patterns }, async (tabs) => {
+      for (const tab of tabs) {
+        const domain = domains.find((d) => tab.url.includes(d.name));
+        await disableVisualDistraction(tab.id, domain.effects);
+      }
+    });
+  });
+}
+
+/*
+function removeCSSOnAllTabs() {
+  getStoredState().then(({ domains }) => {
+    for (const { name, effects } of domains) {
+      if (effects.length === 0) {
+        console.log("No effects to remove for domain:", name);
+        continue;
+      }
+      const urlPattern = `*://*.${name}/*`;
+
+      chrome.tabs.query({ url: [urlPattern] }, async (tabs) => {
+        for (const tab of tabs) {
+          await disableVisualDistraction(tab.id, effects);
+        }
+      });
     }
   });
 }
+*/
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "getToggleState") {
@@ -56,54 +90,69 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (request.action === "updateDomainList") {
     console.log("Received domain list update:", request.domains);
-    chrome.storage.local.set({ domainsWithEffects: request.domains }, () => {});
-    console.log("Domains saved to storage");
 
-    addCSSOnAllTabs(request.domains);
+    // First remove existing effects from all domains
+    getStoredState().then(({ domains }) => {
+      if (domains.length > 0) {
+        removeCSSOnAllTabs();
+      }
+
+      chrome.storage.local.set({ domainsWithEffects: request.domains }, () => {
+        console.log("New domains saved to storage");
+
+        // Get current state to check if we should apply effects
+        chrome.storage.local.get("distractionState", (result) => {
+          if (result.distractionState === "ON") {
+            addCSSOnAllTabs(request.domains);
+          }
+        });
+      });
+    });
+
+    return true;
   }
 
   if (request.action === "setToggleState") {
     chrome.storage.local.set({ distractionState: request.state }, () => {
       sendResponse({ success: true });
-      getStoredState().then(({ sliderValue }) => {
-        const selectedLevel = Object.values(DistractionLevel).find(
-          (level) => level.value === sliderValue
-        );
-        const files = selectedLevel ? selectedLevel.files : [];
-        if (request.state === "ON") {
-          addCSSOnAllTabs(files);
+
+      getStoredState().then(({ domains }) => {
+        if (request.state === "ON" && domains.length > 0) {
+          addCSSOnAllTabs(domains);
         } else {
-          removeVisualsOnAllTabs();
+          removeCSSOnAllTabs();
         }
       });
     });
+
     return true;
   }
 });
 
-// Apply domain effects when a page loads
 chrome.webNavigation.onCompleted.addListener(
   (details) => {
-    console.log("Page navigation completed", details.url);
+    if (details.frameId === 0) {
+      getStoredState().then(({ state, domains }) => {
+        if (state === "ON" && domains.length > 0) {
+          chrome.tabs.get(details.tabId, (tab) => {
+            const url = new URL(tab.url);
+            const hostname = url.hostname;
 
-    getStoredState().then(({ state, domains }) => {
-      if (state === "ON" && domains.length > 0) {
-        chrome.tabs.get(details.tabId, (tab) => {
-          const url = new URL(tab.url);
-          const hostname = url.hostname;
-          console.log("Checking hostname:", hostname);
+            const matchingDomain = domains.find((domain) =>
+              hostname.includes(domain.name)
+            );
 
-          const matchingDomain = domains.find((domain) =>
-            hostname.includes(domain.name)
-          );
-
-          if (matchingDomain?.effects?.length > 0) {
-            console.log("Applying effects for domain:", matchingDomain);
-            enableVisualDistraction(details.tabId, matchingDomain.effects);
-          }
-        });
-      }
-    });
+            if (matchingDomain?.effects?.length > 0) {
+              setTimeout(() => {
+                enableVisualDistraction(details.tabId, matchingDomain.effects);
+              }, 10);
+            }
+          });
+        }
+      });
+    }
   },
-  { url: [{ schemes: ["http", "https"] }] }
+  {
+    url: [{ schemes: ["http", "https"] }],
+  }
 );
