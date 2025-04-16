@@ -1,0 +1,14 @@
+body {
+  -webkit-filter: blur(1px); /* Safari, Chrome, Opera */
+  filter: blur(1px);
+}
+
+img {
+  -webkit-filter: blur(1px); /* Safari, Chrome, Opera */
+  filter: blur(1px);
+}
+
+video {
+  -webkit-filter: blur(1px); /* Safari, Chrome, Opera */
+  filter: blur(1px);
+}
