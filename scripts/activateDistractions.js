@@ -18,14 +18,19 @@ async function enableVisualDistraction(tabId, effects) {
   }
 }
 
-async function disableVisualDistraction(tabId) {
+async function disableVisualDistraction(tabId, effects) {
+  console.log(
+    "Disabling visual distraction for tab:",
+    tabId,
+    "with effects:",
+    effects
+  );
+
+  const cssFiles = effects.map((effect) => `distractions/css/${effect}.css`);
+
   try {
     await chrome.scripting.removeCSS({
-      files: [
-        "distractions/css/video-blur.css",
-        "distractions/css/video-overlay.css",
-        "distractions/css/video-rotate.css",
-      ],
+      files: cssFiles,
       target: { tabId: tabId },
     });
   } catch (error) {
