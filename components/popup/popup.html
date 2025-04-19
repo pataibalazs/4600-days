@@ -8,11 +8,17 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
       rel="stylesheet"
     />
+
     <link href="../../output.css" rel="stylesheet" />
     <script defer src="popup.js"></script>
     <style>
       body {
         font-family: "Inter", sans-serif;
+      }
+
+      .chalky-text {
+        font-family: "Gloria Hallelujah", cursive;
+        white-space: nowrap;
       }
     </style>
   </head>
@@ -20,17 +26,18 @@
     <!-- Main Popup Container -->
     <div class="bg-[#073B3A] rounded-sm w-80 flex-col justify-center">
       <!-- Title -->
-      <div class="text-center py-2 mb-2">
+      <div class="text-center py-2 mb-1 relative">
         <h1 class="text-white text-3xl font-extrabold tracking-tight">4,500</h1>
         <h2 class="text-[#A3D9A5] text-2xl font-extrabold tracking-wide">
           DAYS
         </h2>
+        <!-- Chalky Message with Arrow -->
       </div>
 
       <!-- Toggle Feature Button -->
       <button
         id="toggleFeature"
-        class="flex items-center justify-between w-full border-y border-gray-400 px-4 py-5 cursor-pointer transition duration-100 hover:bg-[#0e4e4f]"
+        class="flex items-center justify-between w-full border-b border-gray-400 px-4 py-4 cursor-pointer transition duration-100 hover:bg-[#0e4e4f]"
         role="switch"
         aria-checked="false"
       >
@@ -47,18 +54,42 @@
       <!-- Add Focus Mode Button -->
       <button
         id="settingsBtn"
-        class="flex items-center w-full px-4 py-4 cursor-pointer transition duration-100 hover:bg-[#0e4e4f]"
+        class="flex items-center w-full px-4 py-3 cursor-pointer transition duration-100 hover:bg-[#0e4e4f]"
       >
-        <span class="text-lg text-white font-bold mr-auto">Add Focus Mode</span>
+        <span class="text-lg text-white font-bold mr-auto">Set Focus Mode</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
           class="w-10 h-10 text-white"
-          style="position: relative; left: 95px"
+          style="position: relative; left: 100px"
         >
           <path
             d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+          />
+        </svg>
+      </button>
+
+      <!-- Cheat Day Button -->
+      <button
+        id="breakDayBtn"
+        class="flex items-center justify-between w-full px-4 py-3 text-white transition duration-100 hover:bg-[#0e4e4f] cursor-pointer border-t border-gray-400"
+      >
+        <div class="flex flex-col items-start">
+          <span class="text-sm font-bold">Take a 5-min break</span>
+          <span class="text-xs text-gray-400">One break per day</span>
+        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="w-8 h-8"
+          style="position: relative; right: 10px"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
+            clip-rule="evenodd"
           />
         </svg>
       </button>
@@ -84,11 +115,11 @@
           </svg>
         </button>
 
-        <!-- Get Rid of Addiction Panel -->
+        <!-- Check Out Website Panel -->
         <button
           class="flex items-center space-x-2 px-3 py-2 text-white transition duration-100 hover:bg-[#0e4e4f] cursor-pointer w-1/2"
         >
-          <span class="text-sm font-bold">Get rid of addiction</span>
+          <span class="text-sm font-bold">Check out website!</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

@@ -159,6 +159,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     return true;
   }
+
+  //HANDLE BREAK
+  if (request.action === "startBreak") {
+    chrome.storage.local.set({ distractionState: "OFF" }, () => {
+      chrome.runtime.sendMessage({
+        action: "updateToggle",
+        state: "OFF",
+      });
+      setTimeout(() => {
+        console.log("Break is done!");
+        chrome.storage.local.set({ distractionState: "ON" });
+      }, 5 * 1000); // 5 seconds
+      return true;
+    });
+
+    return true;
+  }
 });
 
 chrome.webNavigation.onCompleted.addListener(

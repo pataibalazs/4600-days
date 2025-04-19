@@ -4,23 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>4600 Days Settings</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
+    <link href="../../output.css" rel="stylesheet" />
+    <style>
+      /* Custom styles to ensure text size works */
+      .text-size-4xl {
+        font-size: 2.25rem; /* This matches Tailwind's text-4xl */
+        line-height: 2.5rem;
+      }
+    </style>
   </head>
   <body class="bg-gray-100 p-6">
-    <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h1 class="text-2xl font-bold mb-6 text-gray-800">4600 Days Settings</h1>
+    <div class="max-w-3xl mx-auto bg-[#073B3A] p-6 rounded-lg shadow-md">
+      <div class="text-center mb-6 relative">
+        <h1 class="text-white text-5xl font-extrabold tracking-tight">4,500</h1>
+        <h2 class="text-[#A3D9A5] text-size-4xl font-extrabold tracking-wide">
+          DAYS
+        </h2>
+        <h3 class="text-white text-3xl font-extrabold tracking-wide">
+          Settings
+        </h3>
+        <!-- Chalky Message with Arrow -->
+      </div>
 
       <!-- Domain List Section -->
       <div class="mb-6">
-        <h2 class="text-xl font-semibold mb-3 text-gray-700">
-          Managed Domains
-        </h2>
+        <h2 class="text-xl font-semibold mb-3 text-white">Domains & Effects</h2>
 
         <!-- Add Domain Form -->
-        <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+        <div class="border-3 border-[#A3D9A5] mb-4 p-4 bg-gray-50 rounded-lg">
           <div class="flex items-end space-x-2">
             <div class="flex-grow">
               <label
@@ -33,20 +44,31 @@
                 type="text"
                 id="domainInput"
                 placeholder="e.g., instagram.com"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="w-full px-3 text-md py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A3D9A5]"
               />
             </div>
             <button
               id="addDomainBtn"
-              class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="px-3 py-2 bg-[#A3D9A5] text-[#073B3A] rounded-md hover:bg-[#92c894] focus:outline-none focus:ring-2 focus:ring-[#A3D9A5] inline-flex items-center space-x-2"
             >
-              Add
+              <span class="text-md font-semibold">Add domain</span>
+              <svg
+                class="w-5 h-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"
+                />
+              </svg>
             </button>
           </div>
         </div>
 
         <!-- Domain List -->
-        <div class="border rounded-lg overflow-hidden">
+        <div class="border-3 border-[#A3D9A5] rounded-lg overflow-hidden">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
@@ -64,7 +86,7 @@
                 </th>
                 <th
                   scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Actions
                 </th>
@@ -84,16 +106,31 @@
       <div class="flex justify-end">
         <button
           id="saveSettings"
-          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          class="inline-flex items-center space-x-2 text-lg bg-[#A3D9A5] text-[#073B3A] px-4 py-2 font-semibold rounded hover:bg-[#92c894] focus:outline-none focus:ring-2 focus:ring-[#A3D9A5]"
         >
-          Save Settings
+          <span>Save Settings</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5Zm6.61 10.936a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 14.47a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+              clip-rule="evenodd"
+            />
+            <path
+              d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z"
+            />
+          </svg>
         </button>
       </div>
     </div>
 
     <div
       id="effectsModal"
-      class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      class="hidden fixed inset-0 flex items-center justify-center"
     >
       <div class="bg-white rounded-lg p-6 max-w-md w-full">
         <div class="flex justify-between items-center mb-4">
@@ -166,7 +203,7 @@
         <div class="flex justify-end">
           <button
             id="saveEffectsBtn"
-            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
           >
             Apply Effects
           </button>

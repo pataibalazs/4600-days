@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const toggleButton = document.querySelector("[role='switch']");
   const settingsBtn = document.getElementById("settingsBtn");
+  const breakButton = document.getElementById("breakDayBtn");
+
+  breakButtonUIHandler();
 
   chrome.runtime.sendMessage({ action: "getToggleState" }, function (response) {
     if (chrome.runtime.lastError) {
@@ -60,6 +63,74 @@ document.addEventListener("DOMContentLoaded", async function () {
   chrome.runtime.onMessage.addListener((request) => {
     if (request.action === "updateToggle") {
       updateToggleUI(request.state === "ON");
+    }
+  });
+
+  //5-min break button------------------------------------------------------------
+  function isTimeForBreak(lastBreakTime) {
+    if (!lastBreakTime) return true;
+
+    const last = new Date(lastBreakTime);
+    const now = new Date();
+
+    const diffMs = now - last;
+
+    return diffMs >= 5000;
+  }
+
+  function breakButtonUIHandler() {
+    const lastDailyBreakClickTime = localStorage.getItem("dailyBreakUTC");
+
+    if (isTimeForBreak(lastDailyBreakClickTime)) {
+      //Van lehetőség breakre
+      breakButton.classList.remove("bg-[color:var(--color-gray-800)]");
+      breakButton.classList.remove("cursor-not-allowed");
+      breakButton.classList.add("hover:bg-[#0e4e4f]");
+    } else {
+      breakButton.classList.add("bg-[color:var(--color-gray-800)]");
+      breakButton.classList.add("cursor-not-allowed");
+      breakButton.classList.remove("hover:bg-[#0e4e4f]");
+    }
+  }
+
+  breakButton.addEventListener("click", () => {
+    const lastDailyBreakClickTime = localStorage.getItem("dailyBreakUTC");
+    const isBreakAllowed = isTimeForBreak(lastDailyBreakClickTime);
+
+    if (isBreakAllowed) {
+      // Store break time
+      localStorage.setItem("dailyBreakUTC", new Date());
+
+      // Update button appearance
+      breakButton.classList.add("bg-[color:var(--color-gray-800)]");
+      breakButton.classList.add("cursor-not-allowed");
+      breakButton.classList.remove("hover:bg-[#0e4e4f]");
+
+      // Turn off the toggle
+      chrome.storage.local.set({ distractionState: "OFF" }, () => {
+        updateToggleUI(false);
+        // Send message to background script
+        chrome.runtime.sendMessage({
+          action: "setToggleState",
+          state: "OFF",
+        });
+      });
+
+      // Set timer to turn effects back on after 5 minutes
+      chrome.runtime.sendMessage({
+        action: "startBreak",
+        timestamp: new Date().toISOString(),
+      });
+      alert("You've unlocked a 5-minute break. Relax!"); // 5 minutes
+    } else {
+      const last = new Date(lastDailyBreakClickTime);
+      const now = new Date();
+      const diffMs = now - last;
+      const remainingMs = 60000 - diffMs; // 1 minute cooldown
+      const remainingSecs = Math.ceil(remainingMs / 1000);
+      alert(
+        `Please wait ${remainingSecs} seconds before taking another break.`
+      );
     }
   });
 });

@@ -87,13 +87,16 @@ document.addEventListener("DOMContentLoaded", function () {
     domains.forEach((domain) => {
       const row = document.createElement("tr");
 
-      // Format effect names for display (convert kebab-case to Title Case)
+      // Format effect names for display
       const formattedEffects =
         domain.effects && domain.effects.length > 0
           ? domain.effects.map((effect) => {
-              // Split by dash and capitalize first letter of each word
-              return effect
-                .split("-")
+              // Replace underscores with spaces
+              const withoutUnderscore = effect.replace(/_/g, " ");
+
+              // Split words and capitalize each one
+              return withoutUnderscore
+                .split(" ")
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(" ");
             })
