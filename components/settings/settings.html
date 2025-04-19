@@ -11,6 +11,38 @@
         font-size: 2.25rem; /* This matches Tailwind's text-4xl */
         line-height: 2.5rem;
       }
+      /* Custom checkbox styling */
+      .effect-checkbox {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #a3d9a5;
+        border-radius: 0.25rem;
+        outline: none;
+        background-color: white;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .effect-checkbox:checked {
+        background-color: #a3d9a5;
+      }
+
+      .effect-checkbox:checked::after {
+        content: "✓";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #073b3a;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+
+      .effect-checkbox:focus {
+        box-shadow: 0 0 0 2px rgba(163, 217, 165, 0.3);
+      }
     </style>
   </head>
   <body class="bg-gray-100 p-6">
@@ -132,7 +164,9 @@
       id="effectsModal"
       class="hidden fixed inset-0 flex items-center justify-center"
     >
-      <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <div
+        class="bg-white rounded-lg p-6 max-w-md w-full border-3 border-[#A3D9A5]"
+      >
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-medium text-gray-900">
             Select Effects for <span id="modalDomainName"></span>
@@ -153,49 +187,56 @@
             </svg>
           </button>
         </div>
-        <div class="space-y-4 mb-6" id="effectsCheckboxes">
-          <!-- Effect checkboxes will be inserted here by JavaScript -->
-          <div class="flex items-center">
+        <div class="space-y-6 mb-6" id="effectsCheckboxes">
+          <div class="flex items-center mb-1">
             <input
               type="checkbox"
               id="effect-rotate"
-              class="effect-checkbox mr-2 h-5 w-5"
+              class="effect-checkbox mr-2 h-5 w-5 self-center"
               value="rotate"
             />
-            <label for="effect-rotate" class="text-gray-700"
+            <label
+              for="effect-rotate"
+              class="text-lg text-gray-700 cursor-pointer select-none"
               >Rotate Screen</label
             >
           </div>
-          <div class="flex items-center">
+          <div class="flex items-center mb-1">
             <input
               type="checkbox"
               id="effect-gray_filter"
-              class="effect-checkbox mr-2 h-5 w-5"
+              class="effect-checkbox mr-2 h-5 w-5 self-center"
               value="gray_filter"
             />
-            <label for="effect-gray_filter" class="text-gray-700"
+            <label
+              for="effect-gray_filter"
+              class="text-lg text-gray-700 cursor-pointer select-none"
               >Black & White colors</label
             >
           </div>
-          <div class="flex items-center">
+          <div class="flex items-center mb-1">
             <input
               type="checkbox"
               id="effect-light_blur"
-              class="effect-checkbox mr-2 h-5 w-5"
+              class="effect-checkbox mr-2 h-5 w-5 self-center"
               value="light_blur"
             />
-            <label for="effect-light_blur" class="text-gray-700"
+            <label
+              for="effect-light_blur"
+              class="text-lg text-gray-700 cursor-pointer select-none"
               >Light blur</label
             >
           </div>
-          <div class="flex items-center">
+          <div class="flex items-center mb-1">
             <input
               type="checkbox"
               id="effect-heavy_blur"
-              class="effect-checkbox mr-2 h-5 w-5"
+              class="effect-checkbox mr-2 h-5 w-5 self-center"
               value="heavy_blur"
             />
-            <label for="effect-heavy_blur" class="text-gray-700"
+            <label
+              for="effect-heavy_blur"
+              class="text-lg text-gray-700 cursor-pointer select-none"
               >Heavy blur</label
             >
           </div>
@@ -203,9 +244,23 @@
         <div class="flex justify-end">
           <button
             id="saveEffectsBtn"
-            class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            class="inline-flex items-center space-x-2 px-4 py-2 bg-[#A3D9A5] text-[#073B3A] text-lg rounded-md font-semibold hover:bg-[#92c894]"
           >
-            Apply Effects
+            <span>Apply Effects</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+              />
+            </svg>
           </button>
         </div>
       </div>
