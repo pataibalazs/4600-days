@@ -168,8 +168,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         state: "OFF",
       });
       setTimeout(() => {
-        console.log("Break is done!");
-        chrome.storage.local.set({ distractionState: "ON" });
+        chrome.storage.local.set({ distractionState: "ON" }, () => {
+          getStoredState().then(({ domains }) => {
+            if (domains.length > 0) {
+              addCSSOnAllTabs(domains);
+            }
+          });
+        });
       }, 5 * 1000); // 5 seconds
       return true;
     });
