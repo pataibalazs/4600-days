@@ -1,40 +1,45 @@
-async function enableVisualDistraction(tabId, effects) {
-  console.log(
-    "Enabling visual distraction for tab:",
-    tabId,
-    "with effects:",
-    effects
-  );
+importScripts("distractions/css_files.js");
 
-  const cssFiles = effects.map((effect) => `distractions/css/${effect}.css`);
+async function enableVisualDistraction(tabId, effects) {
+  const cssList = effects.map((effect) => cssEffects[effect]).filter(Boolean);
+  const combinedCSS = simpleVisualCSSMerger(cssList);
+
+  console.log("Enabling visual distraction with CSS:", cssList);
 
   try {
-    await chrome.scripting.insertCSS({
-      files: cssFiles,
-      target: { tabId: tabId },
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      func: (css) => {
+        let style = document.getElementById("distraction-style");
+        if (!style) {
+          style = document.createElement("style");
+          style.id = "distraction-style";
+          document.head.appendChild(style);
+        }
+        style.textContent = css;
+      },
+      args: [combinedCSS],
     });
   } catch (error) {
-    console.error("Error enabling visual distraction:", error);
+    console.error("Error injecting style:", error);
   }
 }
 
-async function disableVisualDistraction(tabId, effects) {
-  console.log(
-    "Disabling visual distraction for tab:",
-    tabId,
-    "with effects:",
-    effects
-  );
-
-  const cssFiles = effects.map((effect) => `distractions/css/${effect}.css`);
+async function disableVisualDistraction(tabId) {
+  console.log("Disabling visual distraction by removing style tag");
 
   try {
-    await chrome.scripting.removeCSS({
-      files: cssFiles,
-      target: { tabId: tabId },
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      func: () => {
+        const style = document.getElementById("distraction-style");
+        if (style) {
+          style.remove();
+        }
+      },
     });
   } catch (error) {
-    console.error("Error disabling visual distraction:", error);
+    console.error("Error removing visual distraction style:", error);
   }
 }
 
