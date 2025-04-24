@@ -6,6 +6,7 @@
     <title>4000 Days Settings</title>
     <link href="../../output.css" rel="stylesheet" />
     <style>
+
       /* Custom styles to ensure text size works */
       .text-size-4xl {
         font-size: 2.25rem; /* This matches Tailwind's text-4xl */
@@ -223,51 +224,55 @@
             </svg>
           </button>
         </div>
-        <div class="space-y-3 mb-6" id="effectsCheckboxes"> <div class="flex items-center">
-            <input type="checkbox" id="effect-gray_filter" class="effect-checkbox mr-2" value="gray_filter"/>
-            <label for="effect-gray_filter" class="text-md text-gray-700 cursor-pointer select-none">Grayscale</label>
+        <div class="space-y-3 mb-6" id="effectsCheckboxes">
+          <div class="text-lg font-bold mb-1">🎨 Visual Effects </div>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-gray_filter" class="effect-checkbox mr-2 h-5 w-5" value="gray_filter"/>
+              <label for="effect-gray_filter" class="text-lg text-gray-700 cursor-pointer select-none">Grayscale</label>
           </div>
-          <div class="flex items-center">
-            <input type="checkbox" id="effect-light_blur" class="effect-checkbox mr-2" value="light_blur"/>
-            <label for="effect-light_blur" class="text-md text-gray-700 cursor-pointer select-none">Light Blur</label>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-light_blur" class="effect-checkbox mr-2 h-5 w-5" value="light_blur"/>
+              <label for="effect-light_blur" class="text-lg text-gray-700 cursor-pointer select-none">Light Blur</label>
           </div>
-          <div class="flex items-center">
-            <input type="checkbox" id="effect-heavy_blur" class="effect-checkbox mr-2" value="heavy_blur"/>
-            <label for="effect-heavy_blur" class="text-md text-gray-700 cursor-pointer select-none">Heavy Blur</label>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-heavy_blur" class="effect-checkbox mr-2 h-5 w-5" value="heavy_blur"/>
+              <label for="effect-heavy_blur" class="text-lg text-gray-700 cursor-pointer select-none">Heavy Blur</label>
           </div>
-          <div class="flex items-center">
-            <input type="checkbox" id="effect-rotate" class="effect-checkbox mr-2" value="rotate"/>
-            <label for="effect-rotate" class="text-md text-gray-700 cursor-pointer select-none">Rotate Screen</label>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-rotate" class="effect-checkbox mr-2 h-5 w-5" value="rotate"/>
+              <label for="effect-rotate" class="text-lg text-gray-700 cursor-pointer select-none">Rotate Screen</label>
           </div>
-          <div class="flex items-center">
-            <input type="checkbox" id="effect-saturation" class="effect-checkbox mr-2" value="saturation"/>
-            <label for="effect-saturation" class="text-md text-gray-700 cursor-pointer select-none">Saturation Boost</label>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-saturation" class="effect-checkbox mr-2 h-5 w-5" value="saturation"/>
+              <label for="effect-saturation" class="text-lg text-gray-700 cursor-pointer select-none">Saturation Boost</label>
           </div>
-          <div class="flex items-center">
-            <input type="checkbox" id="effect-wobble" class="effect-checkbox mr-2" value="wobble"/>
-            <label for="effect-wobble" class="text-md text-gray-700 cursor-pointer select-none">Wobble Animation</label>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-invert_colors" class="effect-checkbox mr-2 h-5 w-5" value="invert_colors"/>
+              <label for="effect-invert_colors" class="text-lg text-gray-700 cursor-pointer select-none">Invert Colors</label>
           </div>
-          <div class="flex items-center">
-            <input type="checkbox" id="effect-invert_colors" class="effect-checkbox mr-2" value="invert_colors"/>
-            <label for="effect-invert_colors" class="text-md text-gray-700 cursor-pointer select-none">Invert Colors</label>
+          <div style="height: 3px; background-color: #A3D9A5; margin-top: 1rem; margin-bottom: 1rem;"></div>
+          <div class="text-lg font-bold mb-1">✨ Animation </div>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-wobble" class="effect-checkbox mr-2 h-5 w-5" value="wobble"/>
+              <label for="effect-wobble" class="text-lg text-gray-700 cursor-pointer select-none">Wobble Animation</label>
           </div>
-          <div class="flex items-center">
-            <input type="checkbox" id="effect-breathe" class="effect-checkbox mr-2" value="breathe"/>
-            <label for="effect-breathe" class="text-md text-gray-700 cursor-pointer select-none">Breathe Animation</label>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-breathe" class="effect-checkbox mr-2 h-5 w-5" value="breathe"/>
+              <label for="effect-breathe" class="text-lg text-gray-700 cursor-pointer select-none">Breathe Animation</label>
           </div>
-          <div class="flex items-center">
-            <input type="checkbox" id="effect-vibrate" class="effect-checkbox mr-2" value="vibrate"/>
-            <label for="effect-vibrate" class="text-md text-gray-700 cursor-pointer select-none">Vibration</label>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-vibrate" class="effect-checkbox mr-2 h-5 w-5" value="vibrate"/>
+              <label for="effect-vibrate" class="text-lg text-gray-700 cursor-pointer select-none">Vibration</label>
           </div>
-          <div class="flex items-center">
-            <input type="checkbox" id="effect-letter_jump" class="effect-checkbox mr-2" value="letter_jump"/>
-            <label for="effect-letter_jump" class="text-md text-gray-700 cursor-pointer select-none">Jumping Text</label>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-letter_jump" class="effect-checkbox mr-2 h-5 w-5" value="letter_jump"/>
+              <label for="effect-letter_jump" class="text-lg text-gray-700 cursor-pointer select-none">Jumping Text</label>
           </div>
-          <div class="flex items-center">
-            <input type="checkbox" id="effect-color_shift" class="effect-checkbox mr-2" value="color_shift"/>
-            <label for="effect-color_shift" class="text-md text-gray-700 cursor-pointer select-none">Color Shift</label>
+          <div class="mb-1 flex items-center">
+              <input type="checkbox" id="effect-color_shift" class="effect-checkbox mr-2 h-5 w-5" value="color_shift"/>
+              <label for="effect-color_shift" class="text-lg text-gray-700 cursor-pointer select-none">Color Shift</label>
           </div>
-        </div>
+      </div>
 
         <div class="flex justify-end">
           <button
