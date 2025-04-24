@@ -6,6 +6,19 @@
     <title>4000 Days Settings</title>
     <link href="../../output.css" rel="stylesheet" />
     <style>
+      /* In your <style> block or a separate CSS file */
+        #domainList td:nth-child(2) { /* Selects the second table data cell (Effects) */
+  max-width: 150px; /* Adjust this value as needed */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: max-width 0.3s ease-in-out; /* Add a smooth transition */
+}
+
+#domainList td:nth-child(2):hover {
+  max-width: none; /* Expand to the full width of the content on hover */
+  white-space: normal; /* Allow text to wrap if it's very long */
+}
       /* Custom styles to ensure text size works */
       .text-size-4xl {
         font-size: 2.25rem; /* This matches Tailwind's text-4xl */
