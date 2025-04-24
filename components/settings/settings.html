@@ -6,19 +6,6 @@
     <title>4000 Days Settings</title>
     <link href="../../output.css" rel="stylesheet" />
     <style>
-      /* In your <style> block or a separate CSS file */
-        #domainList td:nth-child(2) { /* Selects the second table data cell (Effects) */
-  max-width: 150px; /* Adjust this value as needed */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  transition: max-width 0.3s ease-in-out; /* Add a smooth transition */
-}
-
-#domainList td:nth-child(2):hover {
-  max-width: none; /* Expand to the full width of the content on hover */
-  white-space: normal; /* Allow text to wrap if it's very long */
-}
       /* Custom styles to ensure text size works */
       .text-size-4xl {
         font-size: 2.25rem; /* This matches Tailwind's text-4xl */
@@ -56,6 +43,43 @@
       .effect-checkbox:focus {
         box-shadow: 0 0 0 2px rgba(163, 217, 165, 0.3);
       }
+
+      /* === CSS Fix for Table Hover === */
+
+           /* Style for Domain Cell (First Column TD) */
+           #domainList td:first-child { /* You can also use td:nth-child(1) */
+        overflow: hidden;         /* Hide overflowing text */
+        text-overflow: ellipsis;  /* Show ... for overflow */
+        white-space: nowrap;      /* Prevent text wrapping */
+      }
+
+      /* Effects Header Style */
+      #domainList th:nth-child(2) {
+        /* Width is set inline on the TH element below, but you could set it here too */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Effects Cell - Initial State */
+      #domainList td:nth-child(2) {
+        overflow: hidden;         /* Clip overflowing text */
+        text-overflow: ellipsis;  /* Show ... */
+        white-space: nowrap;      /* Keep text on one line */
+      }
+
+      /* Effects Cell - Hover State */
+      #domainList td:nth-child(2):hover {
+        overflow: visible;      /* Allow content to spill out */
+        white-space: normal;    /* Allow text to wrap */
+        position: relative;     /* Needed for z-index */
+        z-index: 10;            /* Ensure it appears above adjacent cells */
+        background-color: white; /* Match cell background */
+        /* Optional: Add a subtle shadow for better visual separation */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        cursor: default;        /* Use default cursor */
+      }
+
     </style>
   </head>
   <body class="bg-gray-100 p-6">
@@ -68,14 +92,11 @@
         <h3 class="text-white text-3xl font-extrabold tracking-wide">
           Settings
         </h3>
-        <!-- Chalky Message with Arrow -->
-      </div>
+        </div>
 
-      <!-- Domain List Section -->
       <div class="mb-6">
         <h2 class="text-xl font-semibold mb-3 text-white">Domains & Effects</h2>
 
-        <!-- Add Domain Form -->
         <div class="border-3 border-[#A3D9A5] mb-4 p-4 bg-gray-50 rounded-lg">
           <div class="flex items-end space-x-2">
             <div class="flex-grow">
@@ -112,42 +133,47 @@
           </div>
         </div>
 
-        <!-- Domain List -->
         <div class="border-3 border-[#A3D9A5] rounded-lg overflow-hidden">
-          <table class="min-w-full divide-y divide-gray-200">
+          <table class="min-w-full divide-y divide-gray-200 table-fixed w-full">
             <thead class="bg-gray-50">
               <tr>
                 <th
                   scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
+                  style="width: 35%;" >
                   Domain
                 </th>
                 <th
                   scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
+                  style="width: 45%;" >
                   Effects
                 </th>
                 <th
                   scope="col"
                   class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
+                  style="width: 20%;" >
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody id="domainList" class="bg-white divide-y divide-gray-200">
-              <!-- Domain list items will be inserted here by JavaScript -->
               <tr class="text-center text-gray-500 py-4 italic">
                 <td colspan="3" class="px-6 py-4">No domains added yet</td>
+              </tr>
+              <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">example-long-domain-name-that-might-wrap.com</td>
+                  <td class="px-6 py-4 text-sm text-gray-500">gray_filter, light_blur, heavy_blur, rotate, saturation, wobble</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button class="text-indigo-600 hover:text-indigo-900 mr-2">Edit Effects</button>
+                      <button class="text-red-600 hover:text-red-900">Delete</button>
+                  </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Save Button -->
       <div class="flex justify-end">
         <button
           id="saveSettings"
@@ -175,17 +201,14 @@
 
     <div
       id="effectsModal"
-      class="hidden fixed inset-0 flex items-center justify-center"
-    >
+      class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50" >
       <div
-        class="bg-white rounded-lg p-6 max-w-md w-full border-3 border-[#A3D9A5]"
-      >
+        class="bg-white rounded-lg p-6 max-w-md w-full border-3 border-[#A3D9A5] shadow-xl" >
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-medium text-gray-900">
-            Select Effects for <span id="modalDomainName"></span>
+            Select Effects for <span id="modalDomainName" class="font-semibold"></span>
           </h3>
-          <button id="closeModalBtn" class="text-gray-400 hover:text-gray-500">
-            <svg
+          <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600"> <svg
               class="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
@@ -200,167 +223,49 @@
             </svg>
           </button>
         </div>
-        <div class="space-y-6 mb-6" id="effectsCheckboxes">
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-gray_filter"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="gray_filter"
-            />
-            <label
-              for="effect-gray_filter"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-            >
-              Grayscale
-            </label>
+        <div class="space-y-3 mb-6" id="effectsCheckboxes"> <div class="flex items-center">
+            <input type="checkbox" id="effect-gray_filter" class="effect-checkbox mr-2" value="gray_filter"/>
+            <label for="effect-gray_filter" class="text-md text-gray-700 cursor-pointer select-none">Grayscale</label>
           </div>
-
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-light_blur"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="light_blur"
-            />
-            <label
-              for="effect-light_blur"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-            >
-              Light Blur
-            </label>
+          <div class="flex items-center">
+            <input type="checkbox" id="effect-light_blur" class="effect-checkbox mr-2" value="light_blur"/>
+            <label for="effect-light_blur" class="text-md text-gray-700 cursor-pointer select-none">Light Blur</label>
           </div>
-
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-heavy_blur"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="heavy_blur"
-            />
-            <label
-              for="effect-heavy_blur"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-            >
-              Heavy Blur
-            </label>
+          <div class="flex items-center">
+            <input type="checkbox" id="effect-heavy_blur" class="effect-checkbox mr-2" value="heavy_blur"/>
+            <label for="effect-heavy_blur" class="text-md text-gray-700 cursor-pointer select-none">Heavy Blur</label>
           </div>
-
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-rotate"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="rotate"
-            />
-            <label
-              for="effect-rotate"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-            >
-              Rotate Screen
-            </label>
+          <div class="flex items-center">
+            <input type="checkbox" id="effect-rotate" class="effect-checkbox mr-2" value="rotate"/>
+            <label for="effect-rotate" class="text-md text-gray-700 cursor-pointer select-none">Rotate Screen</label>
           </div>
-
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-saturation"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="saturation"
-            />
-            <label
-              for="effect-saturation"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-            >
-              Saturation Boost
-            </label>
+          <div class="flex items-center">
+            <input type="checkbox" id="effect-saturation" class="effect-checkbox mr-2" value="saturation"/>
+            <label for="effect-saturation" class="text-md text-gray-700 cursor-pointer select-none">Saturation Boost</label>
           </div>
-
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-wobble"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="wobble"
-            />
-            <label
-              for="effect-wobble"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-            >
-              Wobble Animation
-            </label>
+          <div class="flex items-center">
+            <input type="checkbox" id="effect-wobble" class="effect-checkbox mr-2" value="wobble"/>
+            <label for="effect-wobble" class="text-md text-gray-700 cursor-pointer select-none">Wobble Animation</label>
           </div>
-
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-invert_colors"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="invert_colors"
-            />
-            <label
-              for="effect-invert_colors"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-            >
-              Invert Colors
-            </label>
+          <div class="flex items-center">
+            <input type="checkbox" id="effect-invert_colors" class="effect-checkbox mr-2" value="invert_colors"/>
+            <label for="effect-invert_colors" class="text-md text-gray-700 cursor-pointer select-none">Invert Colors</label>
           </div>
-
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-breathe"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="breathe"
-            />
-            <label
-              for="effect-breathe"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-            >
-              Breathe Animation
-            </label>
+          <div class="flex items-center">
+            <input type="checkbox" id="effect-breathe" class="effect-checkbox mr-2" value="breathe"/>
+            <label for="effect-breathe" class="text-md text-gray-700 cursor-pointer select-none">Breathe Animation</label>
           </div>
-
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-vibrate"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="vibrate"
-            />
-            <label
-              for="effect-vibrate"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-              >Vibration</label
-            >
+          <div class="flex items-center">
+            <input type="checkbox" id="effect-vibrate" class="effect-checkbox mr-2" value="vibrate"/>
+            <label for="effect-vibrate" class="text-md text-gray-700 cursor-pointer select-none">Vibration</label>
           </div>
-
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-letter_jump"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="letter_jump"
-            />
-            <label
-              for="effect-letter_jump"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-              >Jumping Text</label
-            >
+          <div class="flex items-center">
+            <input type="checkbox" id="effect-letter_jump" class="effect-checkbox mr-2" value="letter_jump"/>
+            <label for="effect-letter_jump" class="text-md text-gray-700 cursor-pointer select-none">Jumping Text</label>
           </div>
-
-          <div class="flex items-center mb-1">
-            <input
-              type="checkbox"
-              id="effect-color_shift"
-              class="effect-checkbox mr-2 h-5 w-5 self-center"
-              value="color_shift"
-            />
-            <label
-              for="effect-color_shift"
-              class="text-lg text-gray-700 cursor-pointer select-none"
-              >Color Shift</label
-            >
+          <div class="flex items-center">
+            <input type="checkbox" id="effect-color_shift" class="effect-checkbox mr-2" value="color_shift"/>
+            <label for="effect-color_shift" class="text-md text-gray-700 cursor-pointer select-none">Color Shift</label>
           </div>
         </div>
 
