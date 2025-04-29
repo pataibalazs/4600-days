@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   const settingsBtn = document.getElementById("settingsBtn");
   const breakButton = document.getElementById("breakDayBtn");
 
+  document.getElementById("websiteBtn").addEventListener("click", function () {
+    window.open("https://4000days.com", "_blank");
+  });
   breakButtonUIHandler();
 
   chrome.runtime.sendMessage({ action: "getToggleState" }, function (response) {
