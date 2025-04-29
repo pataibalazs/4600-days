@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("Settings page loaded at:", new Date().toISOString());
 
   // Elements
-  const saveSettingsBtn = document.getElementById("saveSettings");
   const domainInput = document.getElementById("domainInput");
   const addDomainBtn = document.getElementById("addDomainBtn");
   const domainList = document.getElementById("domainList");
@@ -26,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
   addDomainBtn.addEventListener("click", addDomain);
   closeModalBtn.addEventListener("click", closeModal);
   saveEffectsBtn.addEventListener("click", saveEffectsForDomain);
-  saveSettingsBtn.addEventListener("click", saveAllSettings);
 
   function loadSettings() {
     console.log("Loading settings from storage");
@@ -51,6 +49,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // Remove path if present
     domain = domain.split("/")[0];
 
+    const domainRegex = /^[a-zA-Z0-9-]+\.(?:[a-zA-Z]{2,}|[a-zA-Z]{2,}\.[a-zA-Z]{2,})$/;
+
+    if (!domainRegex.test(domain)) {
+      alert("Please enter a valid domain (e.g., example.com)");
+      return;
+    }
+
     // Check if domain already exists
     if (domains.some((d) => d.name === domain)) {
       alert("This domain already exists in the list");
@@ -68,7 +73,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Render updated list
     renderDomainList();
+    saveAllSettings();
   }
+
+  domainInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      addDomain();
+    }
+  });
 
   function renderDomainList() {
     // Clear list
