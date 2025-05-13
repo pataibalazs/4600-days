@@ -136,4 +136,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       );
     }
   });
+
+  document.getElementById("rateUsBtn").addEventListener("click", function () {
+    window.open(
+      "https://chromewebstore.google.com/detail/4000-days-extension/hkmigjoopgdahhbdlopmcajccgdmlmej",
+      "_blank"
+    );
+  });
 });
