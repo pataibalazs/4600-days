@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   const settingsBtn = document.getElementById("settingsBtn");
   const breakButton = document.getElementById("breakDayBtn");
 
+  updateToggleUI(true); // Set default state to ON REMOVE THIS LATER
+
   document.getElementById("websiteBtn").addEventListener("click", function () {
     window.open("https://4000days.com", "_blank");
   });
