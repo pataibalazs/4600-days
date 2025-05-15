@@ -1,6 +1,6 @@
 {
   "name": "4000 Days extension",
-  "description": "Base Level Extension",
+  "description": "Helps you reduce distractions, apply visual effects to time-wasting sites, and build better habits.",
   "version": "1.0",
   "manifest_version": 3,
   "action": {

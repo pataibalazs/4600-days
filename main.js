@@ -67,13 +67,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   // HANDLE BREAK
   if (request.action === "startBreak") {
-    setTimeout(() => {
-      getStoredState().then(({ domains }) => {
-        if (domains.length > 0) {
-          addCSSOnAllTabs(domains);
-        }
-      });
-    }, 5 * 60 * 1000); // 5 minutes
+    console.log("startBreak", request.timestamp);
+    removeCSSOnAllTabs();
+    setTimeout(async () => {
+      console.log("Resuming effects after break");
+      const { domains } = await getStoredState();
+      if (domains && domains.length > 0) {
+        addCSSOnAllTabs(domains);
+      }
+    }, request.breakTime);
     return true;
   }
 });

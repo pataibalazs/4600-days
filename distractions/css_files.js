@@ -19,7 +19,7 @@ const cssEffects = {
   `,
   rotate: `
     html {
-      transform: rotate(3deg) !important;
+      transform: rotate(10deg) !important;
     }
   `,
   saturation: `
@@ -55,15 +55,15 @@ const cssEffects = {
   `,
   vibrate: `
     * {
-      animation: vibrate 0.1s infinite;
+      animation: vibrate 0.4s infinite;
     }
 
     @keyframes vibrate {
       0% { transform: translate(0); }
-      25% { transform: translate(1px, -1px); }
-      50% { transform: translate(-1px, 1px); }
-      75% { transform: translate(1px, 1px); }
-      100% { transform: translate(-1px, -1px); }
+      25% { transform: translate(0.15px, -0.15px); }
+      50% { transform: translate(-0.15px, 0.15px); }
+      75% { transform: translate(0.15px, 0.15px); }
+      100% { transform: translate(-0.15px, -0.15px); }
     }
   `,
   letter_jump: `
