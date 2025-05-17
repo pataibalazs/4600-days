@@ -1,6 +1,6 @@
 const oneMinute = 60 * 1000; // 1 minute
-const breakButtonUsageCooldown = 0.2 * oneMinute; // 10 hours
-const breakTime = 0.2 * oneMinute; // 5 minutes
+const breakButtonUsageCooldown = 4 * 60 * oneMinute; // 4 hours
+const breakTime = 5 * oneMinute; // 5 minutes
 
 document.addEventListener("DOMContentLoaded", async function () {
   const settingsBtn = document.getElementById("settingsBtn");
