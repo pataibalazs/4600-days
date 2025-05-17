@@ -49,7 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Remove path if present
     domain = domain.split("/")[0];
 
-    const domainRegex = /^[a-zA-Z0-9-]+\.(?:[a-zA-Z]{2,}|[a-zA-Z]{2,}\.[a-zA-Z]{2,})$/;
+    const domainRegex =
+      /^[a-zA-Z0-9-]+\.(?:[a-zA-Z]{2,}|[a-zA-Z]{2,}\.[a-zA-Z]{2,})$/;
 
     if (!domainRegex.test(domain)) {
       alert("Please enter a valid domain (e.g., example.com)");

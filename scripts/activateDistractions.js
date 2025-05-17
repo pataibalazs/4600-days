@@ -1,6 +1,10 @@
 importScripts("distractions/css_files.js");
 
 async function enableVisualDistraction(tabId, effects) {
+  if (await isThereBreak()) {
+    console.log("Break mode is active, not adding CSS");
+    return;
+  }
   const cssList = effects.map((effect) => cssEffects[effect]).filter(Boolean);
   const combinedCSS = simpleVisualCSSMerger(cssList);
 

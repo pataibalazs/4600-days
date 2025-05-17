@@ -12,6 +12,15 @@ function getStoredState() {
   });
 }
 
+function isThereBreak() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(["breakMode"], (result) => {
+      // If breakMode is true, resolve true; otherwise (missing or false), resolve false
+      resolve(!!result.breakMode);
+    });
+  });
+}
+
 function addCSSOnAllTabs(domainsWithEffects) {
   for (const { name, effects } of domainsWithEffects) {
     if (effects.length === 0) {
@@ -50,7 +59,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "updateDomainList") {
     console.log("Received domain list update:", request.domains);
 
-    // First remove existing effects from all domains
     getStoredState().then(({ domains }) => {
       if (domains.length > 0) {
         removeCSSOnAllTabs();
@@ -61,22 +69,28 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         addCSSOnAllTabs(request.domains);
       });
     });
-
-    return true;
   }
 
   // HANDLE BREAK
   if (request.action === "startBreak") {
     console.log("startBreak", request.timestamp);
     removeCSSOnAllTabs();
-    setTimeout(async () => {
-      console.log("Resuming effects after break");
-      const { domains } = await getStoredState();
-      if (domains && domains.length > 0) {
-        addCSSOnAllTabs(domains);
-      }
-    }, request.breakTime);
-    return true;
+    chrome.storage.local.set({ breakMode: true });
+    chrome.alarms.create("resumeEffects", {
+      when: Date.now() + request.breakTime, // breakTime is in ms
+    });
+  }
+});
+
+// Add this outside the onMessage listener
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+  if (alarm.name === "resumeEffects") {
+    chrome.storage.local.remove("breakMode");
+    console.log("Resuming effects after break (via alarm)");
+    const { domains } = await getStoredState();
+    if (domains && domains.length > 0) {
+      addCSSOnAllTabs(domains);
+    }
   }
 });
 

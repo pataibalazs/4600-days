@@ -15,7 +15,14 @@
   "background": {
     "service_worker": "main.js"
   },
-  "permissions": ["activeTab", "scripting", "storage", "tabs", "webNavigation"],
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs",
+    "webNavigation",
+    "alarms"
+  ],
   "host_permissions": ["http://*/*", "https://*/*"],
   "web_accessible_resources": [
     {
